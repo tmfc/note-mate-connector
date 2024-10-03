@@ -1,0 +1,4 @@
+wechatpy
+pydub
+cryptography
+pydantic

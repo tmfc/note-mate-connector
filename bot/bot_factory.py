@@ -67,6 +67,9 @@ def create_bot(bot_type):
     elif bot_type == const.MiniMax:
         from bot.minimax.minimax_bot import MinimaxBot
         return MinimaxBot()
-
+    
+    elif bot_type == const.NOTEMATE:
+        from bot.notemate.note_mate_bot import NoteMateBot
+        return NoteMateBot()
 
     raise RuntimeError

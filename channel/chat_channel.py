@@ -140,7 +140,7 @@ class ChatChannel(Channel):
                     logger.warning(f"[chat_channel] Nickname '{nick_name}' in In BlackList, ignore")
                     return None
 
-                match_prefix = check_prefix(content, conf().get("single_chat_prefix", [""]))
+                match_prefix = self._check_single_chat_prefix(content, conf().get("single_chat_prefix", [""]))
                 if match_prefix is not None:  # 判断如果匹配到自定义前缀，则返回过滤掉前缀+空格后的内容
                     content = content.replace(match_prefix, "", 1).strip()
                 elif context["origin_ctype"] == ContextType.VOICE:  # 如果源消息是私聊的语音消息，允许不匹配前缀，放宽条件
@@ -377,6 +377,8 @@ class ChatChannel(Channel):
                     logger.info("Cancel {} messages in session {}".format(cnt, session_id))
                 self.sessions[session_id][0] = Dequeue()
 
+    def _check_single_chat_prefix(self, content, prefix_list):
+        return check_prefix(content, prefix_list)
 
 def check_prefix(content, prefix_list):
     if not prefix_list:

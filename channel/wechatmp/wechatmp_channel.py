@@ -302,3 +302,6 @@ class WechatMPChannel(ChatChannel):
         if self.passive_reply:
             assert session_id not in self.cache_dict
             self.running.remove(session_id)
+
+    def _check_single_chat_prefix(self, content, prefix_list):
+        return ""

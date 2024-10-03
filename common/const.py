@@ -16,6 +16,8 @@ ZHIPU_AI = "glm-4"
 MOONSHOT = "moonshot"
 MiniMax = "minimax"
 
+NOTEMATE = 'notemate'
+
 
 # model
 CLAUDE3 = "claude-3-opus-20240229"
@@ -69,6 +71,8 @@ GLM_4_0520 = "glm-4-0520"
 GLM_4_AIR = "glm-4-air"
 GLM_4_AIRX = "glm-4-airx"
 
+NOTE_MATE_1 = "note-mate-1"
+
 MODEL_LIST = [
               GPT35, GPT35_0125, GPT35_1106, "gpt-3.5-turbo-16k",
               O1, O1_MINI, GPT_4o, GPT_4O_0806, GPT_4o_MINI, GPT4_TURBO, GPT4_TURBO_PREVIEW, GPT4_TURBO_01_25, GPT4_TURBO_11_06, GPT4, GPT4_32k, GPT4_06_13, GPT4_32k_06_13,
@@ -80,7 +84,8 @@ MODEL_LIST = [
               "claude", "claude-3-haiku", "claude-3-sonnet", "claude-3-opus", "claude-3-opus-20240229", "claude-3.5-sonnet",
               "moonshot-v1-8k", "moonshot-v1-32k", "moonshot-v1-128k",
               QWEN, QWEN_TURBO, QWEN_PLUS, QWEN_MAX,
-              LINKAI_35, LINKAI_4_TURBO, LINKAI_4o
+              LINKAI_35, LINKAI_4_TURBO, LINKAI_4o,
+              NOTE_MATE_1
             ]
 
 # channel
