@@ -1,14 +1,14 @@
 # encoding:utf-8
 
-import time
-
 from bot.bot import Bot
 from bot.session_manager import SessionManager
 from bridge.context import ContextType
 from bridge.reply import Reply, ReplyType
+from common import memory
 from common.log import logger
 from config import conf
 
+from typing import List
 from pydantic import BaseModel, Field
 import requests
 
@@ -21,6 +21,11 @@ class UserInput(BaseModel):
     message: str = Field(
         description="User input to the agent.",
         examples=["What is the weather in Tokyo?"],
+    )
+    images: List[str] = Field(
+        description="List of image URLs associated with the message.",
+        default_factory=list,
+        examples=[["https://example.com/image1.jpg", "https://example.com/image2.jpg"]],
     )
     thread_id: str | None = Field(
         description="Thread ID to persist and continue a multi-turn conversation.",
@@ -62,6 +67,7 @@ class NoteMateBot(Bot):
                 else:
                     reply = Reply(ReplyType.TEXT, reply_content)
                 return reply
+            
             elif context.type == ContextType.IMAGE_CREATE:
                 ok, retstring = self.create_img(query, 0)
                 reply = None
@@ -73,7 +79,12 @@ class NoteMateBot(Bot):
 
     def reply_text(self, message, session_id, retry_count=0):
         try:
-            request = UserInput(message=message)
+            if session_id in memory.USER_IMAGE_CACHE:
+                images = memory.USER_IMAGE_CACHE[session_id]
+                image_objs = [image["object_name"] for image in images]
+            else:
+                image_objs = []
+            request = UserInput(message=message, images=image_objs)
             request.thread_id = session_id
 
             response = requests.post(
@@ -89,12 +100,14 @@ class NoteMateBot(Bot):
             completion_tokens = response_data['original']['data']['response_metadata']["token_usage"]["completion_tokens"]
             res_content = response_data["content"]
             logger.info("[NOTE_MATE] reply={}".format(res_content))
+            memory.USER_IMAGE_CACHE[session_id] = []
             return {
                 "total_tokens": total_tokens,
                 "completion_tokens": completion_tokens,
                 "content": res_content,
             }
         except Exception as e:
+            print(e)
             need_retry = retry_count < 2
             result = {"completion_tokens": 0, "content": "我现在有点累了，等会再来吧"}
             

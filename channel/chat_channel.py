@@ -2,6 +2,8 @@ import os
 import re
 import threading
 import time
+import oss2
+import hashlib
 from asyncio import CancelledError
 from concurrent.futures import Future, ThreadPoolExecutor
 
@@ -11,6 +13,9 @@ from channel.channel import Channel
 from common.dequeue import Dequeue
 from common import memory
 from plugins import *
+from dotenv import load_dotenv
+
+load_dotenv()
 
 try:
     from voice.audio_convert import any_to_wav
@@ -219,10 +224,18 @@ class ChatChannel(Channel):
                     else:
                         return
             elif context.type == ContextType.IMAGE:  # 图片消息，当前仅做下载保存到本地的逻辑
-                memory.USER_IMAGE_CACHE[context["session_id"]] = {
+                cmsg = context["msg"]
+                cmsg.prepare()
+                object_name = upload_file(context.content)
+                if context["session_id"] not in memory.USER_IMAGE_CACHE:
+                    memory.USER_IMAGE_CACHE[context["session_id"]] = []
+                memory.USER_IMAGE_CACHE[context["session_id"]].append({
                     "path": context.content,
-                    "msg": context.get("msg")
-                }
+                    "object_name": object_name,
+                    "msg": cmsg
+                })
+                self._send_reply(context, Reply(ReplyType.TEXT, "您的照片已收到，您可以进行后续操作"))
+
             elif context.type == ContextType.SHARING:  # 分享信息，当前无默认逻辑
                 pass
             elif context.type == ContextType.FUNCTION or context.type == ContextType.FILE:  # 文件消息及函数调用等，当前无默认逻辑
@@ -396,3 +409,28 @@ def check_contain(content, keyword_list):
         if content.find(ky) != -1:
             return True
     return None
+
+def upload_file(path):
+    # 阿里云账号AccessKey拥有所有API的访问权限，风险很高。强烈建议您创建并使用RAM用户进行API访问或日常运维，请登录RAM控制台创建RAM用户。
+    access_key_id = os.getenv("OSS_ACCESS_KEY_ID")
+    access_key_secret = os.getenv("OSS_ACCESS_KEY_SECRET")
+
+    # 填写Bucket所在地域对应的Endpoint。以华东1（杭州）为例，Endpoint填写为https://oss-cn-hangzhou.aliyuncs.com。
+    endpoint = os.getenv("OSS_ENDPOINT")
+
+    # 填写Bucket名称，例如examplebucket。
+    bucket_name = os.getenv("OSS_BUCKET_NAME")
+
+    file_extension = os.path.splitext(path)[1]
+    # 填写OSS存储空间名称。
+    object_name = hashlib.md5(path.encode()).hexdigest() + file_extension
+
+    # 创建OSSClient实例。
+    auth = oss2.Auth(access_key_id, access_key_secret)
+    bucket = oss2.Bucket(auth, endpoint, bucket_name)
+
+    # 上传文件。
+    with open(path, 'rb') as fileobj:
+        bucket.put_object(object_name, fileobj)
+
+    return object_name

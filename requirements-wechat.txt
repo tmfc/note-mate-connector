@@ -2,3 +2,5 @@ wechatpy
 pydub
 cryptography
 pydantic
+oss2>=2.19.0
+python-dotenv~=1.0.1
