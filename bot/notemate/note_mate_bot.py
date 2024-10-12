@@ -32,6 +32,16 @@ class UserInput(BaseModel):
         default=None,
         examples=["847c6285-8fc9-4560-a83f-4e6285809254"],
     )
+    platform: str = Field(
+        description="Platform code",
+        default=None,
+        examples=["wechatmp"],
+    )
+    platform_id: str = Field(
+        description="The unique user id in channel",
+        default=None,
+        examples=[""],
+    )
 
 # OpenAI对话模型API (可用)
 class NoteMateBot(Bot):
@@ -85,7 +95,9 @@ class NoteMateBot(Bot):
             else:
                 image_objs = []
             request = UserInput(message=message, images=image_objs)
-            request.thread_id = session_id
+            request.thread_id = session_id # session_id is user openid in wechatmp channel
+            request.platform_id = session_id
+            request.platform = conf().get("channel_type")
 
             response = requests.post(
                 f"{self.api_base}/invoke",
