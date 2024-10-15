@@ -1,6 +1,6 @@
-wechatpy
-pydub
-cryptography
-pydantic
-oss2>=2.19.0
+wechatpy~=1.8.18
+pydub~=0.25.1
+cryptography~=41.0.1
+pydantic~=2.6.2
+oss2~=2.19.0
 python-dotenv~=1.0.1
