@@ -25,7 +25,7 @@ jobs:
     container:
       # image: ghcr.io/catthehacker/ubuntu:act-latest
       # image: gitea/runner-images:ubuntu-latest
-      image: ubuntu-act:22.04
+      image: gitea/runner-images:ubuntu-latest
     steps:
       - uses: https://gitea.com/actions/checkout@v4
 
