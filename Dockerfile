@@ -1,5 +1,5 @@
 # 使用官方Python运行时作为父镜像
-FROM python:3.12.7-slim
+FROM registry.cn-hangzhou.aliyuncs.com/sh-lijian/python:3.12.7-slim
 
 # 设置工作目录
 WORKDIR /app

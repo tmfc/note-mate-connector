@@ -31,10 +31,10 @@ jobs:
         id: checkout
         uses: https://gitea.com/actions/checkout@v4
 
-      - name: Install QEMU
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y qemu-user-static
+      # - name: Install QEMU
+      #   run: |
+      #     sudo apt-get update
+      #     sudo apt-get install -y qemu-user-static
 
       #
       # https://github.com/docker/metadata-action
@@ -78,8 +78,8 @@ jobs:
       #
       # Debug
       #
-      - name: Available platforms
-        run: echo ${{ steps.buildx.outputs.platforms }}
+      # - name: Available platforms
+      #   run: echo ${{ steps.buildx.outputs.platforms }}
 
       #
       # https://github.com/docker/login-action
@@ -116,7 +116,7 @@ jobs:
       #
       - name: Inspect
         run: |
-          docker buildx imagetools inspect gitea.example.com/xyz/ubuntu-act:22.04
+          docker buildx imagetools inspect gitea/runner-images:ubuntu-latest
         env:
           DOCKER_HOST: "tcp://docker:2376/"
           DOCKER_TLS_CERTDIR: "/certs"
