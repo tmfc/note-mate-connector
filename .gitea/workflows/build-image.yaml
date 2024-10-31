@@ -116,7 +116,7 @@ jobs:
       #
       - name: Inspect
         run: |
-          docker buildx imagetools inspect gitea/runner-images:ubuntu-latest
+          docker buildx imagetools inspect registry.cn-hangzhou.aliyuncs.com/sh-lijian/note-mate-connector:uat-latest
         env:
           DOCKER_HOST: "tcp://docker:2376/"
           DOCKER_TLS_CERTDIR: "/certs"
