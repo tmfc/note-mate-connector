@@ -1,5 +1,5 @@
 # 使用官方Python运行时作为父镜像
-FROM docker.willking.tech/python:3.12.7-slim
+FROM python:3.12.7-slim
 
 # 设置工作目录
 WORKDIR /app
