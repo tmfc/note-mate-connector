@@ -98,8 +98,10 @@ jobs:
         with:
           push: ${{ gitea.event_name != 'pull_request' }}
           platforms: linux/amd64
-          context: containers/test
-          tags: ${{ steps.meta.outputs.tags }}
+          context: .
+          tags: 
+            ${{ steps.meta.outputs.tags }}
+            registry.cn-hangzhou.aliyuncs.com/sh-lijian/note-mate-connector:uat-latest
           labels: ${{ steps.meta.outputs.labels }}
         env:
           DOCKER_HOST: "tcp://docker:2376/"
