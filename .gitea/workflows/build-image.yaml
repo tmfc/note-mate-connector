@@ -13,7 +13,7 @@ run-name: ${{ gitea.actor }} is testing out Gitea Actions 🚀 🚀 🚀
 
 on:
   push:
-    branches: ["main"]
+    branches: ["uat"]
     paths:
       - .gitea/workflows/build-image.yaml
 
