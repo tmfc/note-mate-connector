@@ -82,12 +82,12 @@ jobs:
       #
       # https://github.com/docker/login-action
       #
-      - name: Login to Gitea
+      - name: Login to docker registry
         uses: https://gitea.com/docker/login-action@v3
         with:
-          registry: gitea.example.com
-          username: ${{ gitea.actor }}
-          password: ${{ secrets.GA_TOKEN }}
+          registry: registry.cn-hangzhou.aliyuncs.com/
+          username: ${{ secrets.DOCKER_ALIYUN_USERNAME }}
+          password: ${{ secrets.DOCKER_ALIYUN_PASSWD }}
 
       #
       # https://github.com/docker/build-push-action
