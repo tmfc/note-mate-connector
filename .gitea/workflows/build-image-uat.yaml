@@ -12,15 +12,22 @@ name: build-image
 run-name: ${{ gitea.actor }} is testing out Gitea Actions 🚀 🚀 🚀
 
 on:
+  pull_request:
+    branches: ["uat"]
+    types: [closed]
+
   push:
     branches: ["uat"]
     paths:
-      - .gitea/workflows/build-image.yaml
+      - .gitea/workflows/build-image-uat.yaml
 
 jobs:
   build-image:
     name: build-image
     runs-on: ubuntu-latest
+
+    # run only when merged 
+    if: github.event.pull_request.merged == true
 
     container:
       # image: ghcr.io/catthehacker/ubuntu:act-latest
