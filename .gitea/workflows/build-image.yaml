@@ -26,10 +26,6 @@ jobs:
       # image: ghcr.io/catthehacker/ubuntu:act-latest
       # image: gitea/runner-images:ubuntu-latest
       image: ubuntu-act:22.04
-      credentials:
-        username: ${{ gitea.actor }}
-        password: ${{ secrets.GA_TOKEN }}
-
     steps:
       - uses: https://gitea.com/actions/checkout@v4
 
