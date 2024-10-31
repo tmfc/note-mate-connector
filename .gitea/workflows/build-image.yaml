@@ -27,7 +27,9 @@ jobs:
       # image: gitea/runner-images:ubuntu-latest
       image: gitea/runner-images:ubuntu-latest
     steps:
-      - uses: https://gitea.com/actions/checkout@v4
+      - name: Checkout
+        id: checkout
+        uses: https://gitea.com/actions/checkout@v4
 
       - name: Install QEMU
         run: |
@@ -99,7 +101,7 @@ jobs:
           push: ${{ gitea.event_name != 'pull_request' }}
           platforms: linux/amd64
           context: .
-          tags: 
+          tags: |
             ${{ steps.meta.outputs.tags }}
             registry.cn-hangzhou.aliyuncs.com/sh-lijian/note-mate-connector:uat-latest
           labels: ${{ steps.meta.outputs.labels }}
